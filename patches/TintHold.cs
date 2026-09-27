@@ -28,6 +28,7 @@ namespace Kf2;
 public static class TintHold
 {
     const uint Stage1 = 0x8002C944;
+    const uint MainLoopSite = 0x80013920;   // return address of func_8001369C's per-frame call
 
     const uint Src = 0x800679A0, Dst = 0x801930F0;
     const uint SrcStride = 0x2C, DstStride = 0x68;
@@ -92,8 +93,10 @@ public static class TintHold
             return;
         }
 
+        // Only the main loop's call is held. The other eight callers reload the
+        // lights and rebuild the quarter-turn matrices from the copy straight after.
         if (_mode == Mode.Verify) Verify(orig, c, mem);
-        else Run(c, mem, FramePacing.StagesWillRun);
+        else Run(c, mem, c.RA != MainLoopSite || FramePacing.StagesWillRun);
     }
 
     static void Run(CpuContext c, PSMemory m, bool reset)
