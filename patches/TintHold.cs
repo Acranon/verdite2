@@ -19,9 +19,10 @@ namespace Kf2;
 /// <c>0x80192D45</c>, and the second wash at <c>0x80192D49</c>..<c>0x80192D4F</c>
 /// zeroed. The stages that ask for a tint (2 and 3: the death fade, the damage
 /// flash) are gated to the tick, so above the tick rate the reset alone ran on the
-/// frames between and a tint showed one frame in seven. Here the reset runs only
-/// when the gated stages will; the copy and the clear still run every frame, as
-/// stage 10 (ungated) reads that word. See "The tints strobed between ticks" in
+/// frames between and a tint showed one frame in seven. Here the resets -- the
+/// tint block and the record copy, which stage 3 blends the DARK fog into -- run
+/// only when the gated stages will; the clear still runs every frame, as stage 10
+/// (ungated) reads that word. See "The tints strobed between ticks" in
 /// docs/PATCHES_AND_MODS.md.
 /// </summary>
 public static class TintHold
